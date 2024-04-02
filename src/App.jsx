@@ -76,7 +76,7 @@ function App() {
       const top = Math.min(startCoords.y, currentCoords.y);
       const width = Math.abs(startCoords.x - currentCoords.x);
       const height = Math.abs(startCoords.y - currentCoords.y);
-      ctx.strokeStyle = "white";
+      ctx.strokeStyle = "green";
       ctx.lineWidth = 2;
       ctx.strokeRect(left, top, width, height);
     } else {
@@ -185,7 +185,6 @@ function App() {
               index={index + 1}
               width={metric.width}
               height={metric.height}
-              bayNum={index + 1}
               onUpdateBayNo={(bayNo) => handleBayNoChange(bayNo, index)}
             />
           ))}
