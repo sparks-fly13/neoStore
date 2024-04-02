@@ -4,12 +4,14 @@ import { Dropdown } from "react-bootstrap";
 const metricDropdownBrands = ["adidas", "nike", "vans", "puma"];
 
 // eslint-disable-next-line react/prop-types
-const Metric = ({ index, onUpdateBayNo }) => {
+const Metric = ({ index, onUpdateBayNo, onUpdateBrand }) => {
   const [selectedBrand, setSelectedBrand] = useState("Select");
   const [bayNo, setBayNo] = useState(index);
 
   const handleBrandClick = (e) => {
-    setSelectedBrand(e.target.innerText);
+    const newBrand = e.target.innerText;
+    setSelectedBrand(newBrand);
+    onUpdateBrand(newBrand);
   };
 
   const handleBayNoChange = (e) => {

@@ -41,6 +41,16 @@ function App() {
     setBorderCoordinates(updatedBorderCoordinates);
   };
 
+  const handleBrandChange = (brand, index) => {
+    const updatedBorderCoordinates = borderCoordinates.map((border, i) => {
+      if (i === index) {
+        return { ...border, brand };
+      }
+      return border;
+    });
+    setBorderCoordinates(updatedBorderCoordinates);
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = canvasWidth;
@@ -52,7 +62,7 @@ function App() {
 
     // Draw the saved borders
     borderCoordinates.forEach((border) => {
-      const { startCoords, endCoords, bayNo } = border;
+      const { startCoords, endCoords, bayNo, brand } = border;
       const left = Math.min(startCoords.x, endCoords.x);
       const top = Math.min(startCoords.y, endCoords.y);
       const width = Math.abs(startCoords.x - endCoords.x);
@@ -60,6 +70,11 @@ function App() {
       ctx.strokeStyle = "white";
       ctx.lineWidth = 3;
       ctx.strokeRect(left, top, width, height);
+      //write a text on top of the border
+      ctx.fillStyle = "red";
+      ctx.font = "16px Times New Roman";
+      ctx.fillText(`${brand ? brand : ""}`, left + width / 2 - 20, top - 10);
+
       //write a text beneath the border
       ctx.fillStyle = "red";
       ctx.font = "13px Arial";
@@ -186,6 +201,7 @@ function App() {
               width={metric.width}
               height={metric.height}
               onUpdateBayNo={(bayNo) => handleBayNoChange(bayNo, index)}
+              onUpdateBrand={(brand) => handleBrandChange(brand, index)}
             />
           ))}
         </div>
