@@ -65,6 +65,8 @@ function App() {
       const height = Math.abs(startCoords.y - currentCoords.y);
       ctx.strokeStyle = "green";
       ctx.strokeRect(left, top, width, height);
+    } else {
+      console.log("border coordinates", borderCoordinates);
     }
   }, [borderCoordinates, startCoords, endCoords, currentCoords, isDragging]);
 
@@ -101,8 +103,6 @@ function App() {
     const width = Math.abs(startCoords.x - endCoords.x);
     const height = Math.abs(startCoords.y - endCoords.y);
     setMetrics([...metrics, { width, height }]);
-    console.log(metrics);
-    console.log(borderCoordinates);
   };
 
   return (
