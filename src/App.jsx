@@ -31,6 +31,8 @@ function App() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    canvas.width = 1000;
+    canvas.height = 550;
     const ctx = canvas.getContext("2d");
 
     //clear the canvas
