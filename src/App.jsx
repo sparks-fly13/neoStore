@@ -51,6 +51,16 @@ function App() {
     setBorderCoordinates(updatedBorderCoordinates);
   };
 
+  const handleDelete = (index) => {
+    const updatedMetrics = [...metrics];
+    updatedMetrics.splice(index, 1);
+    setMetrics(updatedMetrics);
+
+    const updatedBorderCoordinates = [...borderCoordinates];
+    updatedBorderCoordinates.splice(index, 1);
+    setBorderCoordinates(updatedBorderCoordinates);
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = canvasWidth;
@@ -202,6 +212,7 @@ function App() {
               height={metric.height}
               onUpdateBayNo={(bayNo) => handleBayNoChange(bayNo, index)}
               onUpdateBrand={(brand) => handleBrandChange(brand, index)}
+              onDeleteMetric={() => handleDelete(index)}
             />
           ))}
         </div>

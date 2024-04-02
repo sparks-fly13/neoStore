@@ -4,7 +4,7 @@ import { Dropdown } from "react-bootstrap";
 const metricDropdownBrands = ["adidas", "nike", "vans", "puma"];
 
 // eslint-disable-next-line react/prop-types
-const Metric = ({ index, onUpdateBayNo, onUpdateBrand }) => {
+const Metric = ({ index, onUpdateBayNo, onUpdateBrand, onDeleteMetric }) => {
   const [selectedBrand, setSelectedBrand] = useState("Select");
   const [bayNo, setBayNo] = useState(index);
 
@@ -20,8 +20,12 @@ const Metric = ({ index, onUpdateBayNo, onUpdateBrand }) => {
     onUpdateBayNo(newBayNo);
   };
 
+  const handleMetricDelete = () => {
+    onDeleteMetric();
+  };
+
   return (
-    <div className="flex flex-row gap-4">
+    <div className="flex flex-row gap-4 my-3">
       <input
         className="w-20 p-2 border border-gray-300 rounded-md"
         placeholder="Bay No."
@@ -42,6 +46,15 @@ const Metric = ({ index, onUpdateBayNo, onUpdateBrand }) => {
           ))}
         </Dropdown.Menu>
       </Dropdown>
+
+      {/*handling the delete button*/}
+      <button
+        type="button"
+        className="bg-red-500 text-white p-2 rounded-md"
+        onClick={handleMetricDelete}
+      >
+        Delete
+      </button>
     </div>
   );
 };
