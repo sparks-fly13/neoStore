@@ -8,6 +8,8 @@ function App() {
   const handleSave = () => {};
   const handleClose = () => {};
 
+  const [canvasWidth, setCanvasWidth] = useState(0);
+  const [canvasHeight, setCanvasHeight] = useState(0);
   const [borderCoordinates, setBorderCoordinates] = useState([]);
   const [startCoords, setStartCoords] = useState({ x: 0, y: 0 });
   const [endCoords, setEndCoords] = useState({ x: 0, y: 0 });
@@ -29,10 +31,20 @@ function App() {
     setIsDragging(false);
   };
 
+  const handleBayNoChange = (bayNo, index) => {
+    const updatedBorderCoordinates = borderCoordinates.map((border, i) => {
+      if (i === index) {
+        return { ...border, bayNo };
+      }
+      return border;
+    });
+    setBorderCoordinates(updatedBorderCoordinates);
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
-    canvas.width = 1000;
-    canvas.height = 550;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
     const ctx = canvas.getContext("2d");
 
     //clear the canvas
@@ -40,18 +52,19 @@ function App() {
 
     // Draw the saved borders
     borderCoordinates.forEach((border) => {
-      const { startCoords, endCoords } = border;
+      const { startCoords, endCoords, bayNo } = border;
       const left = Math.min(startCoords.x, endCoords.x);
       const top = Math.min(startCoords.y, endCoords.y);
       const width = Math.abs(startCoords.x - endCoords.x);
       const height = Math.abs(startCoords.y - endCoords.y);
-      ctx.strokeStyle = "green";
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 3;
       ctx.strokeRect(left, top, width, height);
       //write a text beneath the border
       ctx.fillStyle = "red";
       ctx.font = "13px Arial";
       ctx.fillText(
-        `Bay ${borderCoordinates.indexOf(border) + 1}`,
+        `Bay ${bayNo ? bayNo : `${borderCoordinates.indexOf(border) + 1}`}`,
         left + width / 2 - 20,
         top + height + 20
       );
@@ -63,12 +76,27 @@ function App() {
       const top = Math.min(startCoords.y, currentCoords.y);
       const width = Math.abs(startCoords.x - currentCoords.x);
       const height = Math.abs(startCoords.y - currentCoords.y);
-      ctx.strokeStyle = "green";
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 2;
       ctx.strokeRect(left, top, width, height);
     } else {
       console.log("border coordinates", borderCoordinates);
     }
-  }, [borderCoordinates, startCoords, endCoords, currentCoords, isDragging]);
+  }, [
+    borderCoordinates,
+    startCoords,
+    endCoords,
+    currentCoords,
+    isDragging,
+    canvasWidth,
+    canvasHeight,
+  ]);
+
+  const handleImageLoad = (event) => {
+    const image = event.target;
+    setCanvasWidth(image.width);
+    setCanvasHeight(image.height);
+  };
 
   const handleMouseDown = (event) => {
     event.preventDefault(); // Prevent default behavior to avoid text selection
@@ -133,7 +161,12 @@ function App() {
             onMouseMove={(event) => handleMouseMove(event)}
             onMouseUp={(event) => handleMouseUp(event)}
           >
-            <img alt="store" src={store} className="relative w-full h-auto" />
+            <img
+              alt="store"
+              src={store}
+              className="relative w-full h-auto"
+              onLoad={handleImageLoad}
+            />
             <canvas
               ref={canvasRef}
               className="absolute top-0 left-0 pointer-events-none"
@@ -152,6 +185,8 @@ function App() {
               index={index + 1}
               width={metric.width}
               height={metric.height}
+              bayNum={index + 1}
+              onUpdateBayNo={(bayNo) => handleBayNoChange(bayNo, index)}
             />
           ))}
         </div>
