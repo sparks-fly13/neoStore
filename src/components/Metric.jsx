@@ -1,12 +1,18 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 
 const metricDropdownBrands = ["adidas", "nike", "vans", "puma"];
 
-// eslint-disable-next-line react/prop-types
-const Metric = ({ index, onUpdateBayNo, onUpdateBrand, onDeleteMetric }) => {
-  const [selectedBrand, setSelectedBrand] = useState("Select");
-  const [bayNo, setBayNo] = useState(index);
+const Metric = ({
+  onUpdateBayNo,
+  onUpdateBrand,
+  onDeleteMetric,
+  brand,
+  bayNo,
+}) => {
+  const [selectedBrand, setSelectedBrand] = useState(brand);
+  const [bayNum, setBayNum] = useState(bayNo);
 
   const handleBrandClick = (e) => {
     const newBrand = e.target.innerText;
@@ -16,7 +22,7 @@ const Metric = ({ index, onUpdateBayNo, onUpdateBrand, onDeleteMetric }) => {
 
   const handleBayNoChange = (e) => {
     const newBayNo = e.target.value;
-    setBayNo(newBayNo);
+    setBayNum(newBayNo);
     onUpdateBayNo(newBayNo);
   };
 
@@ -29,7 +35,7 @@ const Metric = ({ index, onUpdateBayNo, onUpdateBrand, onDeleteMetric }) => {
       <input
         className="w-20 p-2 border border-gray-300 rounded-md"
         placeholder="Bay No."
-        value={bayNo}
+        value={bayNum}
         onChange={handleBayNoChange}
       />
 

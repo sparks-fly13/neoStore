@@ -32,6 +32,15 @@ function App() {
   };
 
   const handleBayNoChange = (bayNo, index) => {
+    //update bayNo in metrics
+    const updatedMetrics = metrics.map((metric, i) => {
+      if (i === index) {
+        return { ...metric, bayNo };
+      }
+      return metric;
+    });
+    setMetrics(updatedMetrics);
+
     const updatedBorderCoordinates = borderCoordinates.map((border, i) => {
       if (i === index) {
         return { ...border, bayNo };
@@ -42,6 +51,15 @@ function App() {
   };
 
   const handleBrandChange = (brand, index) => {
+    //update brand in metrics
+    const updatedMetrics = metrics.map((metric, i) => {
+      if (i === index) {
+        return { ...metric, brand };
+      }
+      return metric;
+    });
+    setMetrics(updatedMetrics);
+
     const updatedBorderCoordinates = borderCoordinates.map((border, i) => {
       if (i === index) {
         return { ...border, brand };
@@ -52,12 +70,13 @@ function App() {
   };
 
   const handleDelete = (index) => {
-    const updatedMetrics = [...metrics];
-    updatedMetrics.splice(index, 1);
+    const updatedMetrics = metrics.filter((metric, i) => i !== index);
     setMetrics(updatedMetrics);
+    console.log("updated metrics", updatedMetrics);
 
-    const updatedBorderCoordinates = [...borderCoordinates];
-    updatedBorderCoordinates.splice(index, 1);
+    const updatedBorderCoordinates = borderCoordinates.filter(
+      (border, i) => i !== index
+    );
     setBorderCoordinates(updatedBorderCoordinates);
   };
 
@@ -83,16 +102,16 @@ function App() {
       //write a text on top of the border
       ctx.fillStyle = "red";
       ctx.font = "16px Times New Roman";
-      ctx.fillText(`${brand ? brand : ""}`, left + width / 2 - 20, top - 10);
+      ctx.fillText(
+        `${!brand || brand === "Select" ? "" : brand}`,
+        left + width / 2 - 20,
+        top - 10
+      );
 
       //write a text beneath the border
       ctx.fillStyle = "red";
       ctx.font = "13px Arial";
-      ctx.fillText(
-        `Bay ${bayNo ? bayNo : `${borderCoordinates.indexOf(border) + 1}`}`,
-        left + width / 2 - 20,
-        top + height + 20
-      );
+      ctx.fillText(`Bay ${bayNo}`, left + width / 2 - 20, top + height + 20);
     });
 
     // Draw the current border
@@ -147,15 +166,18 @@ function App() {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     setEndCoords({ x, y }); // Set end coordinates when mouse is released
+
+    const bayNo = metrics.length + 1;
+    const brand = "Select";
+
     // Save the drawn border coordinates
     setBorderCoordinates([
       ...borderCoordinates,
-      { startCoords, endCoords: { x, y } },
+      { startCoords, endCoords: { x, y }, bayNo, brand },
     ]);
-    // Calculate metrics
-    const width = Math.abs(startCoords.x - endCoords.x);
-    const height = Math.abs(startCoords.y - endCoords.y);
-    setMetrics([...metrics, { width, height }]);
+    //Insert metric attributes
+    setMetrics([...metrics, { bayNo, brand }]);
+    console.log("metrics", metrics);
   };
 
   return (
@@ -206,10 +228,12 @@ function App() {
           </div>
           {metrics.map((metric, index) => (
             <Metric
-              key={index}
+              key={metric.bayNo}
               index={index + 1}
               width={metric.width}
               height={metric.height}
+              brand={metric.brand}
+              bayNo={metric.bayNo}
               onUpdateBayNo={(bayNo) => handleBayNoChange(bayNo, index)}
               onUpdateBrand={(brand) => handleBrandChange(brand, index)}
               onDeleteMetric={() => handleDelete(index)}
