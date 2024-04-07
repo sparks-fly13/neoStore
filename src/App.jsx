@@ -4,7 +4,6 @@ import { Button } from "react-bootstrap";
 import { useState, useEffect, useRef } from "react";
 
 function App() {
-  const handleUndo = () => {};
   const handleSave = () => {};
   const handleClose = () => {};
 
@@ -29,6 +28,17 @@ function App() {
     setEndCoords({ x: 0, y: 0 });
     setCurrentCoords({ x: 0, y: 0 });
     setIsDragging(false);
+  };
+
+  const handleUndo = () => {
+    const updatedMetrics = metrics.slice(0, metrics.length - 1);
+    setMetrics(updatedMetrics);
+
+    const updatedBorderCoordinates = borderCoordinates.slice(
+      0,
+      borderCoordinates.length - 1
+    );
+    setBorderCoordinates(updatedBorderCoordinates);
   };
 
   const handleBayNoChange = (bayNo, index) => {
