@@ -15,6 +15,7 @@ function App() {
   const [currentCoords, setCurrentCoords] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [metrics, setMetrics] = useState([]);
+  const [bayNo, setBayNo] = useState(1);
 
   const canvasRef = useRef(null);
 
@@ -28,6 +29,7 @@ function App() {
     setEndCoords({ x: 0, y: 0 });
     setCurrentCoords({ x: 0, y: 0 });
     setIsDragging(false);
+    setBayNo(1);
   };
 
   const handleUndo = () => {
@@ -39,6 +41,7 @@ function App() {
       borderCoordinates.length - 1
     );
     setBorderCoordinates(updatedBorderCoordinates);
+    setBayNo(bayNo - 1);
   };
 
   const handleBayNoChange = (bayNo, index) => {
@@ -177,7 +180,7 @@ function App() {
     const y = event.clientY - rect.top;
     setEndCoords({ x, y }); // Set end coordinates when mouse is released
 
-    const bayNo = metrics.length + 1;
+    setBayNo(bayNo + 1);
     const brand = "Select";
 
     // Save the drawn border coordinates
@@ -239,7 +242,7 @@ function App() {
           {metrics.map((metric, index) => (
             <Metric
               key={metric.bayNo}
-              index={index + 1}
+              index={metric.bayNo}
               width={metric.width}
               height={metric.height}
               brand={metric.brand}
